@@ -18,16 +18,17 @@ public class ParentMatcher extends Matcher {
 	private Map<Class<?>, Integer> matchedParentsAndWeight = new HashMap<Class<?>, Integer>();
 	
 	private static final int STARTING_WEIGHT_CLASS = 10;
-	private static final int CLASS_WEIGHT_OFFSET = 10;
+	private static final int CLASS_WEIGHT_OFFSET = 1000;
 	
-	private static final int STARTING_WEIGHT_INTERFACE = 1000;
-	private static final int INTERFACE_WEIGHT_OFFSET = 10;
+	private static final int STARTING_WEIGHT_INTERFACE = 20;
+	private static final int INTERFACE_WEIGHT_OFFSET = 1000;
 	
 	@Override
 	public Class<?> match(Class<?> lookupType, Set<Class<?>> registryKeys) {
 
 		matchAndWeighAllParents(lookupType, registryKeys);
 		
+		System.out.println(matchedParentsAndWeight);
 		matchedClass = parentWithMaxWeight();
 		
 		return matchedClass;
@@ -52,7 +53,7 @@ public class ParentMatcher extends Matcher {
 		
 		 Class<?> superType = lookupType.getSuperclass();
 		 
-		 if (superType == TOP_CLASS) {
+		 if (superType == java.lang.Object.class) {
 			 if (registryKeys.contains(superType)) {
 				 matchedParentsAndWeight.put(superType, weight);
 			 }
