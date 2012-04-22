@@ -5,7 +5,7 @@ import java.util.Set;
 public abstract class Matcher {
 
 	protected Matcher next;
-	protected static final Class TOP_CLASS = Class.class;
+	protected static final Class TOP_CLASS = Object.class;
 	
 	public void setNext(Matcher matcher) {
 		next = matcher;

@@ -53,7 +53,7 @@ public class ParentMatcher extends Matcher {
 		
 		 Class<?> superType = lookupType.getSuperclass();
 		 
-		 if (superType == java.lang.Object.class) {
+		 if (superType == TOP_CLASS) {
 			 if (registryKeys.contains(superType)) {
 				 matchedParentsAndWeight.put(superType, weight);
 			 }

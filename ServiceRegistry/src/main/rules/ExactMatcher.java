@@ -53,7 +53,7 @@ public class ExactMatcher extends Matcher {
 		 
 		 //get the super class if any
 		 Class<?> superType = lookupType.getSuperclass();
-		 if (superType != java.lang.Object.class) {
+		 if (superType != TOP_CLASS) {
 			 //check for super class or interfaces
 			 matched = exactClassNameMatch(superType, registryKeys) || interfacesMatch(lookupType, registryKeys) ;
 		 } else {
