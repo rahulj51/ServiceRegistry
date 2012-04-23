@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * calculates the weight of each entry in the hieraqrchy
+ * calculates the weight of each entry in the hierarrchy
  * in general, closest parents are preferred.
  * 
  * @author Rahul
@@ -13,22 +13,23 @@ import java.util.Set;
  */
 public class ParentMatcher extends Matcher {
 
-	private Class matchedClass = TOP_CLASS;	
+	private Class<?> matchedClass = TOP_CLASS;	
 	
 	private Map<Class<?>, Integer> matchedParentsAndWeight = new HashMap<Class<?>, Integer>();
 	
-	private static final int STARTING_WEIGHT_CLASS = 10;
-	private static final int CLASS_WEIGHT_OFFSET = 1000;
+	private static final int STARTING_WEIGHT_CLASS = 1;
+	private static final int CLASS_WEIGHT_OFFSET = 100;
 	
-	private static final int STARTING_WEIGHT_INTERFACE = 20;
-	private static final int INTERFACE_WEIGHT_OFFSET = 1000;
+	private static final int STARTING_WEIGHT_INTERFACE = 2;
+	private static final int NEXT_INTERFACE_OFFSET = 1;
+	private static final int INTERFACE_WEIGHT_OFFSET = 100;
 	
 	@Override
 	public Class<?> match(Class<?> lookupType, Set<Class<?>> registryKeys) {
 
 		matchAndWeighAllParents(lookupType, registryKeys);
 		
-		System.out.println(matchedParentsAndWeight);
+		//System.out.println(matchedParentsAndWeight);
 		matchedClass = parentWithMaxWeight();
 		
 		return matchedClass;
@@ -68,8 +69,8 @@ public class ParentMatcher extends Matcher {
 				 //match found. look no further
 				 matchedParentsAndWeight.put(superType, weight);
 			 } else {
-				 //look some more
-				 matchAndWeighSuperClassAndItsParents(superType, registryKeys, weight + CLASS_WEIGHT_OFFSET);
+				 //look some more up the hierarchy
+				 matchAndWeighSuperClassAndItsParents(superType, registryKeys, weight * CLASS_WEIGHT_OFFSET);
 			 }
 		 }		
 		
@@ -84,10 +85,11 @@ public class ParentMatcher extends Matcher {
 				matchedParentsAndWeight.put(anInterface, weight);
 				//look no further for this interface
 			} else {
-				matchAndWeighInterfacesAndTheirParents(anInterface.getInterfaces(), registryKeys, weight + INTERFACE_WEIGHT_OFFSET);
+			//look some more up the hierarchy
+				matchAndWeighInterfacesAndTheirParents(anInterface.getInterfaces(), registryKeys, weight * INTERFACE_WEIGHT_OFFSET);
 			}
 			
-			weight+= STARTING_WEIGHT_INTERFACE ;
+			weight+= NEXT_INTERFACE_OFFSET ;
 		}		
 	}
 	
@@ -95,7 +97,7 @@ public class ParentMatcher extends Matcher {
 	private Class<?> parentWithMaxWeight() {
 
 		Class<?> matchedClassWithMinWeight = null;
-		int minWeight = 1000000;
+		int minWeight = 1000000; //arbitrary very large weight - replace with constant later
 		for (Class<?> matchedClass : matchedParentsAndWeight.keySet()) {
 			
 			int weight = matchedParentsAndWeight.get(matchedClass);

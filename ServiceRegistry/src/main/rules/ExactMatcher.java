@@ -4,7 +4,7 @@ import java.util.Set;
 
 public class ExactMatcher extends Matcher {
 	
-	private Class matchedClass = TOP_CLASS;
+	private Class<?> matchedClass = TOP_CLASS;
 
 	@Override
 	public Class<?> match(Class<?> lookupType, Set<Class<?>> registryKeys) {
